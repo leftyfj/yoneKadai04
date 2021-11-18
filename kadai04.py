@@ -1,5 +1,4 @@
 import csv
-# １
 # オーダー登録した商品の一覧（商品名、価格）を表示できるようにしてください
 
 ### 商品クラス
@@ -18,11 +17,9 @@ class Item:
     print(f'価格:{self.price}')
     print(' ')
   
-    
-    # return self.name, self.price
-  
   def get_code(self):
-    return int(self.code)
+    # return int(self.code)
+    return self.code
   
   def get_name(self):
     return self.name
@@ -45,30 +42,54 @@ class Item:
 
 # オーダークラス
 class Order:
-  def __init__(self, fileName):
+  def __init__(self, fileName,items_master ):
     self.filename = fileName
+    self.items_master = items_master
   
   def get_balance(self):
+    _balance_list = []
     with open(self.filename, "r", encoding="utf-8_sig") as f:
-      # balance_list = f.read().splitlines()
       reader = csv.reader(f)
-      _balance_list = [row for row in reader]
+      for row in reader:
+        _balance_list.append([int(row[0]), row[1].strip(' '), int(row[2])])
       return _balance_list
     
   #注文残表示
   def show_balance(self):
     with open(self.filename, "r", encoding="utf-8_sig") as f:
-      # balance_list = f.read().splitlines()
       balance_list = csv.reader(f)
       print('注文番号','コード','数量')
       for balance in balance_list:
         print(balance[0], balance[1], balance[2])
+        
   #新規
   def new_order(self):
-    code = input('商品コードを入力してください。')
-    quantity = input('数量(個数)を入力しえください。')
-    
     ##codeが商品マスタに登録されているか
+    flag = 0
+    while flag == 0:
+      code = input('商品コードを入力してください。')
+      for items in self.items_master:
+        if code == items.get_code():
+          flag = 1
+          break
+      
+      if flag == 0:
+         print('商品マスタに登録されていません')
+         continue
+      quantity = input('数量(個数)を入力してください。')
+      
+    order_balance = self.get_balance()
+    last_order_num = order_balance[-1][0]
+    order = [last_order_num + 1, code, quantity]
+    order_balance.append(order)
+    
+    #DB(csvファイル)を更新
+    with open(self.filename, 'w', newline='') as f:
+      writer = csv.writer(f)
+      writer.writerows(order_balance)
+    
+    print('新規オーダーを追加しました。')
+      
   #変更
   
   #取り消し
@@ -96,14 +117,14 @@ def main():
 # オーダーをコンソール（ターミナル）から登録できるようにしてください
 # 登録時は商品コードをキーとする
   print('### オーダー残 ###')
-  order = Order("order_balance.csv")
-  # order.show_balance()
+  order = Order("order_balance.csv", items_master)
+  order.show_balance()
   balance_list = order.get_balance()
   print('注文番号','商品コード','商品名','残','価格','金額')
   for bal in balance_list:
     for item in items_master:
-      if(int(bal[1]) == item.get_code()):
-        amount = int(bal[2]) * item.get_price()
+      if item.get_code() == bal[1]:
+        amount = bal[2] * item.get_price()
         print(bal[0], bal[1], item.get_name(), bal[2], item.get_price(), amount)
   print('')
   order.new_order()
