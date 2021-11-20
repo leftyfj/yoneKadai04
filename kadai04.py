@@ -9,8 +9,35 @@ class Item:
       self.code = in_code
       self.name = in_name
       self.price = in_price
+      self.items_master = []
       
-  #読み込み
+  #R 読み込み
+  def read_from_master(self):
+    # items_master = []
+    with open('items_master.csv','r', encoding='utf-8_sig', newline='') as file:
+      for row in csv.reader(file):
+        self.items_master.append(row)
+      print(self.items_master)
+      
+  #U 更新 新規商品登録
+  def add_new_item(self):
+    print('### 新商品登録 ###')
+    name = input('商品名を入力してください。')
+    for row in self.items_master:
+      if name in row[1]:
+        checker = 0
+        break
+      else:
+        #同名の商品が登録されていない
+        checker = 1
+
+    if checker == 1:
+      input('価格を入力してください。')
+    else :
+      print('この商品は登録済です。名前を変更してください。')
+
+    
+  #一覧表示
   def show_detail(self):
     print(f'商品コード:{self.code}')
     print(f'商品名:{self.name}')
@@ -127,7 +154,14 @@ def main():
         amount = bal[2] * item.get_price()
         print(bal[0], bal[1], item.get_name(), bal[2], item.get_price(), amount)
   print('')
-  order.new_order()
   
+  # 新規注文
+  # order.new_order()
+  
+  #商品マスタファイルからの読み込み
+  item.read_from_master()
+  
+  item.add_new_item()
+
 if __name__ == "__main__":
     main()
