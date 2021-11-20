@@ -19,23 +19,33 @@ class Item:
         self.items_master.append(row)
       print(self.items_master)
       
-  #U 更新 新規商品登録
+  # U 更新 新規商品登録
   def add_new_item(self):
+    # print(f'最後の商品code={last_code}')
     print('### 新商品登録 ###')
-    name = input('商品名を入力してください。')
-    for row in self.items_master:
-      if name in row[1]:
-        checker = 0
+    
+    #登録する商品はすでにマスターに登録されているか確認
+    while True:
+      name = input('商品名を入力してください。')
+      for row in self.items_master:
+        if name in row[1]:
+          checker = 0
+          break
+        else:
+          #同名の商品が登録されていない
+          checker = 1
+
+      if checker == 0:
+        print('この商品は登録済です。')
+        continue
+      else :
         break
-      else:
-        #同名の商品が登録されていない
-        checker = 1
-
-    if checker == 1:
-      input('価格を入力してください。')
-    else :
-      print('この商品は登録済です。名前を変更してください。')
-
+    code = input('商品コードを入力してください。')
+    price = input('価格を入力してください。')
+    
+    new_item = [code, name, price]
+    self.items_master.append(new_item)
+    print(self.items_master)
     
   #一覧表示
   def show_detail(self):
