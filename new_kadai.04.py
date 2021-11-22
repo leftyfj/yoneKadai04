@@ -138,13 +138,14 @@ class Order:
       print(row[0], row[1], row[2])
     print('')
 
-  def new_order(self):
+  def new_order(self,code, quantity):
+    self.code = code
     items_master = ItemsMaster().get_master_list()
     order_balance = self.get_balance()
     last_num = int(order_balance[-1][0])
-    code = input('商品コードを入力して下さい。')
+    # code = input('商品コードを入力して下さい。')
     for row in items_master:
-      if code in row:
+      if self.code in row:
         checker = 0
         break
       else:
@@ -152,13 +153,14 @@ class Order:
     if checker == 1:
       print('未登録の商品です。先に登録して下さい。')
     else:
-      quantity = input('数量を入力してください。')
+      self.quantity = quantity
+      # quantity = input('数量を入力してください。')
       #order_balance.csvファイルに追記する。
       with open(ORDER_BALANCE_PATH, 'a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([last_num + 1, code, quantity])
-      print('注文を受け付けました。') 
-    
+        writer.writerow([last_num + 1, self.code, self.quantity])
+      # print('注文を受け付けました。') 
+
 
 #注文明細の一覧を作成する関数      
 def order_detail(item_list, order_list):     
@@ -195,7 +197,7 @@ def main():
  
   order = Order(ORDER_BALANCE_PATH)
   order.show_balance()
-  
+ 
 
   
 
@@ -204,11 +206,14 @@ def main():
   #登録時は商品コードをキーとする
   # ４
   #オーダー登録時に個数も登録できるようにしてください
-  order.new_order()
-  
+  print('### 新規注文 ###')
+  code = input('商品コードを入力して下さい。')
+  quantity = input('数量を入力して下さい。')
+  order.new_order(code, quantity)
+
   # ３
   #  商品マスタをCSVから登録できるようにしてください
-  items_master.add_new_item()
+  # items_master.add_new_item()
   
   # ５
   #オーダー登録した商品の一覧（商品名、価格）を表示し、かつ合計金額、個数を表示できるようにしてください
@@ -216,6 +221,12 @@ def main():
   
   # ６
   # お客様からのお預かり金額を入力しお釣りを計算できるようにしてください
+  
+  print('### 新規注文 ###')
   cash_in = input('お客様からお預かりした金額を入力して下さい。')
+  code = input('商品コードを入力して下さい。')
+  quantity = input('数量を入力して下さい。')
+  order.new_order(code, quantity)
+ 
 if __name__ == "__main__":
     main()
