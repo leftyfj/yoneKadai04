@@ -1,8 +1,12 @@
 import csv
+import datetime
+import traceback
+import os
 
 ITEMS_MASTER_PATH = 'items_master.csv'
 ORDER_BALANCE_PATH = 'order_balance.csv'
-
+_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
+TRANSACTION_FILE_PATH = f'./transaction/trans_{_datetime}.txt'
 
 ### 商品クラス
 class Item:
@@ -72,6 +76,7 @@ class Order:
     #オーダー明細、合計金額をリスト化するメソッド
     def make_order_detail(self):
         item_master = ItemsMaster().get_master()
+        self.item_order_list_detail = []
         self.total_amount = 0
         for order in self.item_order_list:
             for item in item_master:             
@@ -171,5 +176,16 @@ def main():
     print(f'お預かり {deposit:,}円')
     print(f'お釣り:{change:,}円')
     
+    # ７
+    # 課題５、６の内容を、日付時刻をファイル名としたレシートファイル（テキスト）に出力できるようにしてください
+    with open(TRANSACTION_FILE_PATH, 'a', encoding='utf-8_sig', newline='\n') as file:
+        print('商品コード,', '商品名,', '数量,', '単価,', '金額', file=file)
+        for row in detail:
+            file.write(",".join(str(_) for _ in row) + '\n')
+        print(f'合計:{total_amount:,}円', file=file)
+        print(f'入金:{deposit:,}円', file=file)
+        print(f'釣り:{change:,}円' + '\n', file=file)
+        
+
 if __name__ == "__main__":
     main()

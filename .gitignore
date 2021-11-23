@@ -139,6 +139,7 @@ cython_debug/
 
 .vscode/
 unused/
+transaction/
 _README.md
 TODO.txt
 pos-system_original.py
