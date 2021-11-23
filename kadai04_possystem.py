@@ -30,9 +30,13 @@ class Item:
 
     def add_to_master(self):
         row = [self.item_code, self.item_name, self.price]
-        with open(ITEMS_MASTER_PATH, 'a', encoding='utf-8_sig', newline=None) as file:
-            writer = csv.writer(file)
-            writer.writerow(row)
+        
+        list = ItemsMaster().get_master()
+        list.append(row)
+        
+        with open(ITEMS_MASTER_PATH, 'w', encoding='utf-8_sig', newline='') as file:
+            writer = csv.writer(file, lineterminator='\n')
+            writer.writerows(list)
 
 
 ### オーダークラス
@@ -65,11 +69,13 @@ class Order:
         
     #オーダー明細、合計金額をリスト化するメソッド
     def make_order_detail(self):
+        item_master = ItemsMaster().get_master()
         self.total_amount = 0
         for order in self.item_order_list:
-            for item in self.item_master:
+            for item in item_master:
                 # if order[0] == item.get_code():
-                if order[0] == item[0]:
+                
+                if order[0] in item:
                     #code = item.get_code()
                     #name = item.get_name()
                     code = item[0]
@@ -96,14 +102,45 @@ class ItemsMaster:
     
 ### メイン処理
 def main():
-
-    # マスタ登録
-    
-    
-    
     # ３
     #商品マスタをCSVから登録できるようにしてください
+    #商品マスタの呼び出し
+    
+    # マスタ登録
+    #新商品のマスタ登録
+    print('### 新商品マスタ登録 ###')
+    confirm = input('商品登録をしますか？ はい⇒ Y(y)、 いいえ => N (n)')
     item_master = ItemsMaster().get_master()
+    confirm = confirm.upper()
+    if confirm == ('Y'):
+        check = 'Y'
+        while True: 
+            code = str(input('商品コードを入力して下さい。'))
+            ##商品コード重複確認
+            flag = 0
+            for item in item_master:
+                if code in item:
+                    flag = 0
+                    break
+                else:
+                    flag = 1
+            
+            if flag == 0:
+                print('この商品コードは既に使用されています。変更してください。')
+                continue
+            else:
+                break
+                
+        name = input('商品名を入力して下さい。')
+        price = int(input('価格を入力して下さい。'))
+        new_item = Item(code, name, price)
+        new_item.add_to_master()
+            
+        check = input('登録を続けますか？ 続ける ⇒ Y、 終わる => N ')
+        check = check.upper()
+
+    print('注文に移ります')
+
     # item_master=[]
     # item_master.append(Item("001","りんご",100))
     # item_master.append(Item("002","なし",120))
