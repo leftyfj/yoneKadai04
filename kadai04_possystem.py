@@ -1,6 +1,9 @@
 import csv
 import datetime
 import traceback
+import os
+
+
 
 ITEMS_MASTER_PATH = 'items_master.csv'
 ORDER_BALANCE_PATH = 'order_balance.csv'
@@ -9,6 +12,8 @@ _datetime2 = datetime.datetime.now().strftime('%Y-%m-%d')
 TRANSACTION_FILE_PATH = f'./transaction/trans_{_datetime}.txt'
 LOG_FILE_PATH = f'./log/log_{_datetime2}.txt'
 
+os.makedirs(os.path.dirname(TRANSACTION_FILE_PATH), exist_ok=True)
+os.makedirs(os.path.dirname(LOG_FILE_PATH), exist_ok=True)
 ### ログ出力関数
 def make_log(txt):
     now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
