@@ -62,6 +62,8 @@ class Order:
     #注文の明細を表示するメソッド
     def view_order_detail(self):
         detail_list, total = self.make_order_detail()
+        print('')
+        print('### 取引明細 ###')
         print('商品コード', '商品名', '数量', '単価', '金額')
         for row in detail_list:
             print(row[0], row[1], row[2], row[3], row[4])
@@ -72,15 +74,10 @@ class Order:
         item_master = ItemsMaster().get_master()
         self.total_amount = 0
         for order in self.item_order_list:
-            for item in item_master:
-                # if order[0] == item.get_code():
-                
+            for item in item_master:             
                 if order[0] in item:
-                    #code = item.get_code()
-                    #name = item.get_name()
                     code = item[0]
                     name = item[1]
-                    #price = int(item.get_price())
                     price = int(item[2])
                     quantity = int(order[1])
                     amount = price * quantity
@@ -88,7 +85,7 @@ class Order:
                     self.total_amount += amount
         return self.item_order_list_detail, self.total_amount
                 
-    ### 商品マスタクラス
+### 商品マスタクラス
 class ItemsMaster:
     def __init__(self) -> None:
         self.item_master = []
@@ -112,7 +109,7 @@ def main():
     confirm = input('商品登録をしますか？ はい⇒ Y(y)、 いいえ => N (n)')
     item_master = ItemsMaster().get_master()
     confirm = confirm.upper()
-    if confirm == ('Y'):
+    if confirm == 'Y':
         check = 'Y'
         while True: 
             code = str(input('商品コードを入力して下さい。'))
@@ -141,18 +138,6 @@ def main():
 
     print('注文に移ります')
 
-    # item_master=[]
-    # item_master.append(Item("001","りんご",100))
-    # item_master.append(Item("002","なし",120))
-    # item_master.append(Item("003","みかん",150))
-    
-    # apple = Item("001", "りんご", 100)
-    # pear = Item("002", "なし", 120)
-    # orange = Item("003", "みかん", 150)
-    # strawberry = Item('004',"いちご", 250)
-    # strawberry.add_to_master()
-    
-
     # ２
     # オーダーをコンソール（ターミナル）から登録できるようにしてください
     # 登録時は商品コードをキーとする
@@ -173,10 +158,6 @@ def main():
         deposit = int(input('お預かりした金額を入力して下さい。'))
         print('注文を終了します。')   
         
-    # order.add_item_order("001")
-    # order.add_item_order("002")
-    # order.add_item_order("003")
-
     # オーダー表示
     # １
     #オーダー登録した商品の一覧（商品名、価格）を表示できるようにしてください
