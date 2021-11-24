@@ -1,3 +1,6 @@
+from config import *
+from itemmaster import ItemsMaster
+
 ### オーダークラス
 class Order:
     def __init__(self, item_master):

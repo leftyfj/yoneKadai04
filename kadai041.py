@@ -7,8 +7,7 @@ from item import Item
 from order import Order
 from itemmaster import ItemsMaster
 
-ITEMS_MASTER_PATH = 'items_master.csv'
-ORDER_BALANCE_PATH = 'order_balance.csv'
+from config import *
 
 _datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
 _datetime2 = datetime.datetime.now().strftime('%Y-%m-%d')

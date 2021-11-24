@@ -1,3 +1,8 @@
+import csv
+
+from config import *
+
+
 ## 商品マスタクラス
 class ItemsMaster:
     def __init__(self) -> None:
